@@ -1,7 +1,6 @@
+
 package com.example.lifeos.ui.tasks
 
-
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -14,23 +13,20 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.lifeos.data.local.entity.TaskEntity
 
 private val Background = Color(0xFF0B1020)
 private val SurfaceDark = Color(0xFF171F33)
 private val Accent = Color(0xFF36BFFA)
 
-private data class LifeTask(
-    val id: Long,
-    val title: String,
-    val isCompleted: Boolean = false
-)
-
 @Composable
-fun TasksScreen(onBack: () -> Unit) {
+fun TasksScreen(
+    onBack: () -> Unit,
+    taskViewModel: TaskViewModel
+) {
 
-    val tasks = remember {
-        mutableStateListOf<LifeTask>()
-    }
+    // Observe tasks from Room through ViewModel
+    val tasks by taskViewModel.tasks.collectAsState()
 
     var showDialog by remember { mutableStateOf(false) }
     var taskTitle by remember { mutableStateOf("") }
@@ -50,7 +46,7 @@ fun TasksScreen(onBack: () -> Unit) {
         ) {
 
             TextButton(onClick = onBack) {
-                Text("⬅\uFE0F Back to LIFEOS", color = Accent)
+                Text("← Back to LIFEOS", color = Accent)
             }
 
             Spacer(Modifier.height(16.dp))
@@ -136,15 +132,10 @@ fun TasksScreen(onBack: () -> Unit) {
                                 Checkbox(
                                     checked = task.isCompleted,
                                     onCheckedChange = { checked ->
-                                        val index = tasks.indexOfFirst {
-                                            it.id == task.id
-                                        }
-
-                                        if (index != -1) {
-                                            tasks[index] = task.copy(
-                                                isCompleted = checked
-                                            )
-                                        }
+                                        taskViewModel.updateTask(
+                                            task,
+                                            checked
+                                        )
                                     },
                                     colors = CheckboxDefaults.colors(
                                         checkedColor = Accent
@@ -161,12 +152,13 @@ fun TasksScreen(onBack: () -> Unit) {
 
                                 TextButton(
                                     onClick = {
-                                        tasks.removeAll {
-                                            it.id == task.id
-                                        }
+                                        taskViewModel.deleteTask(task)
                                     }
                                 ) {
-                                    Text("Delete", color = Color(0xFFFF7070))
+                                    Text(
+                                        "Delete",
+                                        color = Color(0xFFFF7070)
+                                    )
                                 }
                             }
                         }
@@ -198,6 +190,7 @@ fun TasksScreen(onBack: () -> Unit) {
         AlertDialog(
             onDismissRequest = {
                 showDialog = false
+                taskTitle = ""
             },
             title = {
                 Text("Create a task")
@@ -216,12 +209,7 @@ fun TasksScreen(onBack: () -> Unit) {
                         val title = taskTitle.trim()
 
                         if (title.isNotEmpty()) {
-                            tasks.add(
-                                LifeTask(
-                                    id = System.currentTimeMillis(),
-                                    title = title
-                                )
-                            )
+                            taskViewModel.addTask(title)
 
                             taskTitle = ""
                             showDialog = false
