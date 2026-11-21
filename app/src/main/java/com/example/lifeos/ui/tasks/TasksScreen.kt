@@ -178,6 +178,7 @@ fun TasksScreen(onBack: () -> Unit) {
                 onClick = { showDialog = true },
                 modifier = Modifier
                     .fillMaxWidth()
+                    .padding(bottom = 16.dp)
                     .height(54.dp),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Accent
