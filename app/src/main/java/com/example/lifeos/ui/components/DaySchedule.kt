@@ -4,11 +4,14 @@ package com.example.lifeos.ui.components
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.lifeos.data.local.entity.CalendarEventEntity
+import com.example.lifeos.ui.theme.*
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -26,7 +29,7 @@ fun DaySchedule(
         ) {
             Text(
                 text = "No events scheduled for this day.",
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                color = LifeOSMuted
             )
         }
     } else {
@@ -58,14 +61,23 @@ private fun EventCard(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 12.dp),
-        onClick = onClick
+        onClick = onClick,
+        shape = RoundedCornerShape(16.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = LifeOSSurface
+        ),
+        elevation = CardDefaults.cardElevation(
+            defaultElevation = 2.dp
+        )
     ) {
         Column(
             modifier = Modifier.padding(16.dp)
         ) {
             Text(
                 text = event.title,
-                style = MaterialTheme.typography.titleMedium
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.SemiBold,
+                color = LifeOSText
             )
 
             Spacer(modifier = Modifier.height(6.dp))
@@ -79,14 +91,16 @@ private fun EventCard(
                     }"
                 },
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.primary
+                color = LifeOSPurple,
+                fontWeight = FontWeight.Medium
             )
 
             if (event.location.isNotBlank()) {
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
                     text = "Location: ${event.location}",
-                    style = MaterialTheme.typography.bodySmall
+                    style = MaterialTheme.typography.bodySmall,
+                    color = LifeOSMuted
                 )
             }
 
@@ -94,7 +108,8 @@ private fun EventCard(
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
                     text = event.description,
-                    style = MaterialTheme.typography.bodySmall
+                    style = MaterialTheme.typography.bodySmall,
+                    color = LifeOSMuted
                 )
             }
         }

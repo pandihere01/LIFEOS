@@ -12,23 +12,16 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.lifeos.data.local.entity.ReminderEntity
 import com.example.lifeos.ui.components.ReminderDialog
+import com.example.lifeos.ui.theme.*
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.Locale
-
-// LIFEOS theme colors
-private val ReminderBackground = Color(0xFF0B1020)
-private val ReminderNavy = Color(0xFF171F33)
-private val ReminderAccent = Color(0xFF36BFFA)
-private val ReminderTextPrimary = Color.White
-private val ReminderTextSecondary = Color(0xFFB0BECF)
 
 @Composable
 fun ReminderScreen(
@@ -44,7 +37,7 @@ fun ReminderScreen(
     }
 
     Scaffold(
-        containerColor = ReminderBackground
+        containerColor = LifeOSBackground
     ) { paddingValues ->
 
         Column(
@@ -56,7 +49,8 @@ fun ReminderScreen(
             // HEADER
             Surface(
                 modifier = Modifier.fillMaxWidth(),
-                color = ReminderNavy
+                color = LifeOSSurface,
+                shadowElevation = 1.dp
             ) {
                 Row(
                     modifier = Modifier
@@ -67,7 +61,7 @@ fun ReminderScreen(
                     TextButton(
                         onClick = onBack,
                         colors = ButtonDefaults.textButtonColors(
-                            contentColor = ReminderTextPrimary
+                            contentColor = LifeOSPurple
                         )
                     ) {
                         Text("Back")
@@ -81,14 +75,15 @@ fun ReminderScreen(
                         Text(
                             text = "LIFEOS",
                             style = MaterialTheme.typography.labelSmall,
-                            color = ReminderAccent
+                            color = LifeOSPurple,
+                            fontWeight = FontWeight.Bold
                         )
 
                         Text(
                             text = "Reminders",
                             style = MaterialTheme.typography.titleLarge,
                             fontWeight = FontWeight.SemiBold,
-                            color = ReminderTextPrimary
+                            color = LifeOSText
                         )
                     }
                 }
@@ -98,7 +93,7 @@ fun ReminderScreen(
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(ReminderBackground)
+                    .background(LifeOSBackground)
                     .padding(16.dp)
             ) {
 
@@ -112,7 +107,7 @@ fun ReminderScreen(
                         text = "Your Reminders",
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold,
-                        color = ReminderTextPrimary
+                        color = LifeOSText
                     )
 
                     Button(
@@ -122,8 +117,8 @@ fun ReminderScreen(
                         },
                         shape = RoundedCornerShape(12.dp),
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = ReminderAccent,
-                            contentColor = ReminderBackground
+                            containerColor = LifeOSPurple,
+                            contentColor = LifeOSSurface
                         )
                     ) {
                         Text("+ Add", fontWeight = FontWeight.Bold)
@@ -147,7 +142,7 @@ fun ReminderScreen(
                                 text = "No reminders yet",
                                 style = MaterialTheme.typography.titleMedium,
                                 fontWeight = FontWeight.SemiBold,
-                                color = ReminderTextPrimary
+                                color = LifeOSText
                             )
 
                             Spacer(modifier = Modifier.height(6.dp))
@@ -155,7 +150,7 @@ fun ReminderScreen(
                             Text(
                                 text = "Create your first reminder!",
                                 style = MaterialTheme.typography.bodyMedium,
-                                color = ReminderTextSecondary
+                                color = LifeOSMuted
                             )
                         }
                     }
@@ -174,7 +169,7 @@ fun ReminderScreen(
                                 modifier = Modifier.fillMaxWidth(),
                                 shape = RoundedCornerShape(18.dp),
                                 colors = CardDefaults.cardColors(
-                                    containerColor = ReminderNavy
+                                    containerColor = LifeOSSurface
                                 ),
                                 elevation = CardDefaults.cardElevation(
                                     defaultElevation = 2.dp
@@ -195,9 +190,9 @@ fun ReminderScreen(
                                             )
                                         },
                                         colors = CheckboxDefaults.colors(
-                                            checkedColor = ReminderAccent,
-                                            uncheckedColor = ReminderTextSecondary,
-                                            checkmarkColor = ReminderBackground
+                                            checkedColor = LifeOSPurple,
+                                            uncheckedColor = LifeOSMuted,
+                                            checkmarkColor = LifeOSSurface
                                         )
                                     )
 
@@ -206,15 +201,15 @@ fun ReminderScreen(
                                             .weight(1f)
                                             .padding(start = 8.dp)
                                     ) {
-
                                         Text(
                                             text = reminder.title,
                                             style = MaterialTheme.typography.titleMedium,
                                             fontWeight = FontWeight.SemiBold,
-                                            color = if (reminder.isCompleted)
-                                                ReminderTextSecondary
-                                            else
-                                                ReminderTextPrimary
+                                            color = if (reminder.isCompleted) {
+                                                LifeOSMuted
+                                            } else {
+                                                LifeOSText
+                                            }
                                         )
 
                                         if (reminder.description.isNotBlank()) {
@@ -225,7 +220,7 @@ fun ReminderScreen(
                                             Text(
                                                 text = reminder.description,
                                                 style = MaterialTheme.typography.bodySmall,
-                                                color = ReminderTextSecondary
+                                                color = LifeOSMuted
                                             )
                                         }
 
@@ -246,7 +241,8 @@ fun ReminderScreen(
                                         Text(
                                             text = formattedTime,
                                             style = MaterialTheme.typography.bodySmall,
-                                            color = ReminderAccent
+                                            color = LifeOSPurple,
+                                            fontWeight = FontWeight.Medium
                                         )
 
                                         Spacer(
@@ -256,7 +252,7 @@ fun ReminderScreen(
                                         Text(
                                             text = "Priority: ${reminder.priority} · Repeat: ${reminder.recurrenceType}",
                                             style = MaterialTheme.typography.labelSmall,
-                                            color = ReminderTextSecondary
+                                            color = LifeOSMuted
                                         )
                                     }
 
@@ -269,7 +265,7 @@ fun ReminderScreen(
                                     ) {
                                         Text(
                                             text = "Edit",
-                                            color = ReminderAccent,
+                                            color = LifeOSPurple,
                                             style = MaterialTheme.typography.labelMedium
                                         )
                                     }
@@ -283,7 +279,7 @@ fun ReminderScreen(
                                         Icon(
                                             imageVector = Icons.Default.Delete,
                                             contentDescription = "Delete reminder",
-                                            tint = Color(0xFFFF6B6B)
+                                            tint = LifeOSRed
                                         )
                                     }
                                 }

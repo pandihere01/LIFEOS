@@ -42,6 +42,8 @@ import com.example.lifeos.ui.reminders.ReminderViewModelFactory
 
 import com.example.lifeos.ui.theme.LIFEOSTheme
 
+import androidx.activity.SystemBarStyle
+
 class MainActivity : ComponentActivity() {
 
     private val notificationPermissionLauncher =
@@ -68,7 +70,21 @@ class MainActivity : ComponentActivity() {
 
         requestExactAlarmPermission()
 
-        enableEdgeToEdge()
+        enableEdgeToEdge(
+            statusBarStyle = SystemBarStyle.light(
+                android.graphics.Color.TRANSPARENT,
+                android.graphics.Color.TRANSPARENT
+            ),
+            navigationBarStyle = SystemBarStyle.light(
+                android.graphics.Color.TRANSPARENT,
+                android.graphics.Color.TRANSPARENT
+            )
+        )
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            window.isNavigationBarContrastEnforced = false
+            window.isStatusBarContrastEnforced = false
+        }
 
         // 1. Initialize Room database
         val database = LifeOSDatabase.getDatabase(applicationContext)

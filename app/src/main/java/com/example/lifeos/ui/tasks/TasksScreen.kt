@@ -9,22 +9,16 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.lifeos.data.local.entity.TaskEntity
-
-private val Background = Color(0xFF0B1020)
-private val SurfaceDark = Color(0xFF171F33)
-private val Accent = Color(0xFF36BFFA)
+import com.example.lifeos.ui.theme.*
 
 @Composable
 fun TasksScreen(
     onBack: () -> Unit,
     taskViewModel: TaskViewModel
 ) {
-
     // Observe tasks from Room through ViewModel
     val tasks by taskViewModel.tasks.collectAsState()
 
@@ -36,63 +30,76 @@ fun TasksScreen(
 
     Surface(
         modifier = Modifier.fillMaxSize(),
-        color = Background
+        color = LifeOSBackground
     ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .statusBarsPadding()
+                .navigationBarsPadding()
                 .padding(20.dp)
         ) {
 
+            // Back navigation
             TextButton(onClick = onBack) {
-                Text("⬅\uFE0F Back to LIFEOS", color = Accent)
+                Text(
+                    "← Back to LIFEOS",
+                    color = LifeOSPurple,
+                    fontWeight = FontWeight.SemiBold
+                )
             }
 
-            Spacer(Modifier.height(16.dp))
+            Spacer(Modifier.height(12.dp))
 
+            // Header
             Text(
                 "My Tasks",
-                color = Color.White,
+                color = LifeOSText,
                 fontSize = 28.sp,
                 fontWeight = FontWeight.Bold
             )
 
+            Spacer(Modifier.height(6.dp))
+
             Text(
                 "Stay organized. Get things done.",
-                color = Color.LightGray,
+                color = LifeOSMuted,
                 fontSize = 14.sp
             )
 
             Spacer(Modifier.height(24.dp))
 
+            // Task summary cards
             Row(
                 horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 TaskSummary(
                     title = "Pending",
                     count = pendingCount,
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f),
+                    countColor = LifeOSPurple
                 )
 
                 TaskSummary(
                     title = "Completed",
                     count = completedCount,
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f),
+                    countColor = LifeOSGreen
                 )
             }
 
-            Spacer(Modifier.height(24.dp))
+            Spacer(Modifier.height(26.dp))
 
             Text(
                 "YOUR TASK LIST",
-                color = Color.White,
+                color = LifeOSText,
                 fontWeight = FontWeight.Bold,
                 fontSize = 14.sp
             )
 
             Spacer(Modifier.height(12.dp))
 
+            // Empty state or task list
             if (tasks.isEmpty()) {
                 Box(
                     modifier = Modifier
@@ -102,14 +109,15 @@ fun TasksScreen(
                 ) {
                     Text(
                         "No tasks yet.\nTap + to create your first task.",
-                        color = Color.LightGray,
-                        fontSize = 15.sp
+                        color = LifeOSMuted,
+                        fontSize = 15.sp,
+                        lineHeight = 23.sp
                     )
                 }
             } else {
                 LazyColumn(
                     modifier = Modifier.weight(1f),
-                    verticalArrangement = Arrangement.spacedBy(10.dp)
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     items(
                         items = tasks,
@@ -117,18 +125,21 @@ fun TasksScreen(
                     ) { task ->
 
                         Card(
+                            modifier = Modifier.fillMaxWidth(),
                             colors = CardDefaults.cardColors(
-                                containerColor = SurfaceDark
+                                containerColor = LifeOSSurface
                             ),
-                            shape = RoundedCornerShape(14.dp)
+                            shape = RoundedCornerShape(18.dp),
+                            elevation = CardDefaults.cardElevation(
+                                defaultElevation = 2.dp
+                            )
                         ) {
                             Row(
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .padding(12.dp),
+                                    .padding(horizontal = 10.dp, vertical = 8.dp),
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
-
                                 Checkbox(
                                     checked = task.isCompleted,
                                     onCheckedChange = { checked ->
@@ -138,7 +149,9 @@ fun TasksScreen(
                                         )
                                     },
                                     colors = CheckboxDefaults.colors(
-                                        checkedColor = Accent
+                                        checkedColor = LifeOSGreen,
+                                        uncheckedColor = LifeOSMuted,
+                                        checkmarkColor = LifeOSSurface
                                     )
                                 )
 
@@ -146,8 +159,11 @@ fun TasksScreen(
                                     text = task.title,
                                     modifier = Modifier.weight(1f),
                                     color = if (task.isCompleted)
-                                        Color.Gray else Color.White,
-                                    fontSize = 15.sp
+                                        LifeOSMuted
+                                    else
+                                        LifeOSText,
+                                    fontSize = 15.sp,
+                                    fontWeight = FontWeight.Medium
                                 )
 
                                 TextButton(
@@ -157,7 +173,8 @@ fun TasksScreen(
                                 ) {
                                     Text(
                                         "Delete",
-                                        color = Color(0xFFFF7070)
+                                        color = LifeOSRed,
+                                        fontWeight = FontWeight.Medium
                                     )
                                 }
                             }
@@ -166,26 +183,29 @@ fun TasksScreen(
                 }
             }
 
+            // Add task button
             Button(
                 onClick = { showDialog = true },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 16.dp)
+                    .padding(bottom = 8.dp)
                     .height(54.dp),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = Accent
+                    containerColor = LifeOSPurple,
+                    contentColor = LifeOSSurface
                 ),
-                shape = RoundedCornerShape(14.dp)
+                shape = RoundedCornerShape(16.dp)
             ) {
                 Text(
                     "+ Add New Task",
-                    color = Background,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 15.sp
                 )
             }
         }
     }
 
+    // Create task dialog
     if (showDialog) {
         AlertDialog(
             onDismissRequest = {
@@ -193,14 +213,23 @@ fun TasksScreen(
                 taskTitle = ""
             },
             title = {
-                Text("Create a task")
+                Text(
+                    "Create a task",
+                    color = LifeOSText,
+                    fontWeight = FontWeight.Bold
+                )
             },
             text = {
                 OutlinedTextField(
                     value = taskTitle,
                     onValueChange = { taskTitle = it },
                     label = { Text("Task name") },
-                    singleLine = true
+                    singleLine = true,
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = LifeOSPurple,
+                        focusedLabelColor = LifeOSPurple,
+                        cursorColor = LifeOSPurple
+                    )
                 )
             },
             confirmButton = {
@@ -210,13 +239,16 @@ fun TasksScreen(
 
                         if (title.isNotEmpty()) {
                             taskViewModel.addTask(title)
-
                             taskTitle = ""
                             showDialog = false
                         }
                     }
                 ) {
-                    Text("Add")
+                    Text(
+                        "Add",
+                        color = LifeOSPurple,
+                        fontWeight = FontWeight.Bold
+                    )
                 }
             },
             dismissButton = {
@@ -226,9 +258,11 @@ fun TasksScreen(
                         taskTitle = ""
                     }
                 ) {
-                    Text("Cancel")
+                    Text("Cancel", color = LifeOSMuted)
                 }
-            }
+            },
+            containerColor = LifeOSSurface,
+            shape = RoundedCornerShape(24.dp)
         )
     }
 }
@@ -237,31 +271,38 @@ fun TasksScreen(
 private fun TaskSummary(
     title: String,
     count: Int,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    countColor: androidx.compose.ui.graphics.Color
 ) {
     Card(
-        modifier = modifier.height(90.dp),
-        shape = RoundedCornerShape(14.dp),
+        modifier = modifier.height(100.dp),
+        shape = RoundedCornerShape(18.dp),
         colors = CardDefaults.cardColors(
-            containerColor = SurfaceDark
+            containerColor = LifeOSSurface
+        ),
+        elevation = CardDefaults.cardElevation(
+            defaultElevation = 2.dp
         )
     ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(14.dp),
+                .padding(16.dp),
             verticalArrangement = Arrangement.Center
         ) {
             Text(
                 title,
-                color = Color.LightGray,
-                fontSize = 13.sp
+                color = LifeOSMuted,
+                fontSize = 13.sp,
+                fontWeight = FontWeight.Medium
             )
+
+            Spacer(Modifier.height(5.dp))
 
             Text(
                 count.toString(),
-                color = Accent,
-                fontSize = 24.sp,
+                color = countColor,
+                fontSize = 26.sp,
                 fontWeight = FontWeight.Bold
             )
         }

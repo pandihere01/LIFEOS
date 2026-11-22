@@ -11,7 +11,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -19,17 +18,12 @@ import com.example.lifeos.data.local.entity.CalendarEventEntity
 import com.example.lifeos.ui.components.DaySchedule
 import com.example.lifeos.ui.components.EventDialog
 import com.example.lifeos.ui.components.MonthCalendar
+import com.example.lifeos.ui.theme.*
 import java.time.Instant
 import java.time.LocalDate
 import java.time.YearMonth
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
-
-private val CalendarBackground = Color(0xFF0B1020)
-private val CalendarNavy = Color(0xFF171F33)
-private val CalendarAccent = Color(0xFF36BFFA)
-private val CalendarTextPrimary = Color.White
-private val CalendarTextSecondary = Color(0xFFB0BECF)
 
 @Composable
 fun CalendarScreen(
@@ -38,21 +32,10 @@ fun CalendarScreen(
 ) {
     val events by calendarViewModel.events.collectAsStateWithLifecycle()
 
-    var selectedDate by remember {
-        mutableStateOf(LocalDate.now())
-    }
-
-    var currentMonth by remember {
-        mutableStateOf(YearMonth.now())
-    }
-
-    var showEventDialog by remember {
-        mutableStateOf(false)
-    }
-
-    var editingEvent by remember {
-        mutableStateOf<CalendarEventEntity?>(null)
-    }
+    var selectedDate by remember { mutableStateOf(LocalDate.now()) }
+    var currentMonth by remember { mutableStateOf(YearMonth.now()) }
+    var showEventDialog by remember { mutableStateOf(false) }
+    var editingEvent by remember { mutableStateOf<CalendarEventEntity?>(null) }
 
     val zone = ZoneId.systemDefault()
 
@@ -81,7 +64,7 @@ fun CalendarScreen(
     }.toSet()
 
     Scaffold(
-        containerColor = CalendarBackground
+        containerColor = LifeOSBackground
     ) { paddingValues ->
 
         Column(
@@ -93,23 +76,20 @@ fun CalendarScreen(
             // HEADER
             Surface(
                 modifier = Modifier.fillMaxWidth(),
-                color = CalendarNavy
+                color = LifeOSSurface,
+                shadowElevation = 1.dp
             ) {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(
-                            horizontal = 16.dp,
-                            vertical = 18.dp
-                        ),
+                        .padding(horizontal = 16.dp, vertical = 18.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-
                     IconButton(onClick = onBack) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = "Back",
-                            tint = CalendarTextPrimary
+                            tint = LifeOSPurple
                         )
                     }
 
@@ -121,7 +101,8 @@ fun CalendarScreen(
                         Text(
                             text = "LIFEOS CALENDAR",
                             style = MaterialTheme.typography.labelSmall,
-                            color = CalendarAccent
+                            color = LifeOSPurple,
+                            fontWeight = FontWeight.Bold
                         )
 
                         Spacer(modifier = Modifier.height(3.dp))
@@ -132,7 +113,7 @@ fun CalendarScreen(
                             ),
                             style = MaterialTheme.typography.titleLarge,
                             fontWeight = FontWeight.SemiBold,
-                            color = CalendarTextPrimary
+                            color = LifeOSText
                         )
                     }
 
@@ -142,7 +123,7 @@ fun CalendarScreen(
                             currentMonth = YearMonth.now()
                         },
                         colors = ButtonDefaults.textButtonColors(
-                            contentColor = CalendarAccent
+                            contentColor = LifeOSPurple
                         )
                     ) {
                         Text("Today")
@@ -154,7 +135,7 @@ fun CalendarScreen(
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(CalendarBackground)
+                    .background(LifeOSBackground)
                     .padding(16.dp)
             ) {
 
@@ -163,7 +144,7 @@ fun CalendarScreen(
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(22.dp),
                     colors = CardDefaults.cardColors(
-                        containerColor = CalendarNavy
+                        containerColor = LifeOSSurface
                     ),
                     elevation = CardDefaults.cardElevation(
                         defaultElevation = 2.dp
@@ -208,7 +189,7 @@ fun CalendarScreen(
                                 DateTimeFormatter.ofPattern("EEEE")
                             ).uppercase(),
                             style = MaterialTheme.typography.labelSmall,
-                            color = CalendarAccent,
+                            color = LifeOSPurple,
                             fontWeight = FontWeight.Bold
                         )
 
@@ -220,7 +201,7 @@ fun CalendarScreen(
                             ),
                             style = MaterialTheme.typography.headlineSmall,
                             fontWeight = FontWeight.Bold,
-                            color = CalendarTextPrimary
+                            color = LifeOSText
                         )
                     }
 
@@ -231,8 +212,8 @@ fun CalendarScreen(
                         },
                         modifier = Modifier.size(48.dp),
                         colors = IconButtonDefaults.filledIconButtonColors(
-                            containerColor = CalendarAccent,
-                            contentColor = CalendarBackground
+                            containerColor = LifeOSPurple,
+                            contentColor = LifeOSSurface
                         ),
                         shape = RoundedCornerShape(15.dp)
                     ) {
@@ -247,7 +228,6 @@ fun CalendarScreen(
 
                 // DAILY SCHEDULE
                 if (selectedDayEvents.isEmpty()) {
-
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -260,7 +240,7 @@ fun CalendarScreen(
                             Text(
                                 text = "No events",
                                 style = MaterialTheme.typography.titleMedium,
-                                color = CalendarTextPrimary,
+                                color = LifeOSText,
                                 fontWeight = FontWeight.Medium
                             )
 
@@ -269,7 +249,7 @@ fun CalendarScreen(
                             Text(
                                 text = "Nothing scheduled for this day.",
                                 style = MaterialTheme.typography.bodyMedium,
-                                color = CalendarTextSecondary
+                                color = LifeOSMuted
                             )
 
                             Spacer(modifier = Modifier.height(16.dp))
@@ -282,12 +262,11 @@ fun CalendarScreen(
                             ) {
                                 Text(
                                     text = "+ Add your first event",
-                                    color = CalendarAccent
+                                    color = LifeOSPurple
                                 )
                             }
                         }
                     }
-
                 } else {
                     DaySchedule(
                         events = selectedDayEvents,

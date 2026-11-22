@@ -14,18 +14,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.example.lifeos.ui.theme.*
 import java.time.LocalDate
 import java.time.YearMonth
-
-// LIFEOS calendar colors
-private val CalendarBackground = Color(0xFF0B1020)
-private val CalendarSurface = Color(0xFF171F33)
-private val CalendarAccent = Color(0xFF36BFFA)
-private val CalendarText = Color(0xFFFFFFFF)
-private val CalendarMuted = Color(0xFF9AA8BD)
-
-// New event-date highlight color
-private val CalendarEventDate = Color(0xFF263B5C)
 
 @Composable
 fun MonthCalendar(
@@ -45,7 +36,7 @@ fun MonthCalendar(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .background(CalendarSurface, MaterialTheme.shapes.large)
+            .background(LifeOSSurface, MaterialTheme.shapes.large)
             .padding(12.dp)
     ) {
 
@@ -59,7 +50,7 @@ fun MonthCalendar(
                 Icon(
                     Icons.Default.ChevronLeft,
                     contentDescription = "Previous month",
-                    tint = CalendarAccent
+                    tint = LifeOSPurple
                 )
             }
 
@@ -67,14 +58,14 @@ fun MonthCalendar(
                 text = "${month.month.name.lowercase()
                     .replaceFirstChar { it.uppercase() }} ${month.year}",
                 style = MaterialTheme.typography.titleMedium,
-                color = CalendarText
+                color = LifeOSText
             )
 
             IconButton(onClick = onNextMonth) {
                 Icon(
                     Icons.Default.ChevronRight,
                     contentDescription = "Next month",
-                    tint = CalendarAccent
+                    tint = LifeOSPurple
                 )
             }
         }
@@ -93,7 +84,7 @@ fun MonthCalendar(
                     Text(
                         text = day,
                         style = MaterialTheme.typography.labelSmall,
-                        color = CalendarMuted
+                        color = LifeOSMuted
                     )
                 }
             }
@@ -115,22 +106,21 @@ fun MonthCalendar(
                             .padding(3.dp),
                         contentAlignment = Alignment.Center
                     ) {
-
                         if (date != null) {
 
                             val isSelected = date == selectedDate
                             val hasEvent = date in eventDates
 
                             val dateBackground = when {
-                                isSelected -> CalendarAccent
-                                hasEvent -> CalendarEventDate
-                                else -> CalendarBackground
+                                isSelected -> LifeOSPurple
+                                hasEvent -> LifeOSPurpleSoft
+                                else -> Color.Transparent
                             }
 
                             val dateTextColor = when {
-                                isSelected -> CalendarBackground
-                                hasEvent -> CalendarAccent
-                                else -> CalendarText
+                                isSelected -> LifeOSSurface
+                                hasEvent -> LifeOSPurpleDark
+                                else -> LifeOSText
                             }
 
                             Column(
@@ -167,7 +157,7 @@ fun MonthCalendar(
                                             .padding(top = 2.dp)
                                             .size(4.dp)
                                             .background(
-                                                CalendarAccent,
+                                                LifeOSPurple,
                                                 CircleShape
                                             )
                                     )

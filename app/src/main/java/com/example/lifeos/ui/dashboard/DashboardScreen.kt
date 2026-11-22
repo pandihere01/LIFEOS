@@ -1,22 +1,21 @@
 
 package com.example.lifeos.ui.dashboard
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.foundation.layout.statusBarsPadding
-
-private val Background = Color(0xFF0B1020)
-private val SurfaceDark = Color(0xFF171F33)
-private val Accent = Color(0xFF36BFFA)
+import com.example.lifeos.ui.theme.*
 
 @Composable
 fun DashboardScreen(
@@ -26,100 +25,119 @@ fun DashboardScreen(
 ) {
     Surface(
         modifier = Modifier.fillMaxSize(),
-        color = Background
+        color = LifeOSBackground
     ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .statusBarsPadding()
-                .padding(24.dp)
+                .navigationBarsPadding()
+                .verticalScroll(rememberScrollState())
+                .padding(20.dp)
         ) {
 
+            // Header
             Text(
                 text = "✨ LIFEOS",
-                color = Accent,
-                fontSize = 18.sp,
+                color = LifeOSPurple,
+                fontSize = 20.sp,
                 fontWeight = FontWeight.Bold
             )
 
-            Spacer(Modifier.height(30.dp))
+            Spacer(Modifier.height(28.dp))
 
             Text(
-                text = "Hello Pandi!",
-                color = Color.White,
+                text = "Hello Pandi! 👋",
+                color = LifeOSText,
                 fontSize = 28.sp,
                 fontWeight = FontWeight.Bold
             )
 
+            Spacer(Modifier.height(6.dp))
+
             Text(
                 text = "What would you like to do today?",
-                color = Color.LightGray,
+                color = LifeOSMuted,
                 fontSize = 14.sp
             )
 
-            Spacer(Modifier.height(48.dp))
+            Spacer(Modifier.height(28.dp))
 
-            Box(
+            // Voice Assistant Card
+            Card(
                 modifier = Modifier.fillMaxWidth(),
-                contentAlignment = Alignment.Center
+                shape = RoundedCornerShape(24.dp),
+                colors = CardDefaults.cardColors(
+                    containerColor = LifeOSPurple
+                )
             ) {
-                Button(
-                    onClick = {
-                        // Voice integration will be added later.
-                    },
-                    modifier = Modifier.size(170.dp),
-                    shape = CircleShape,
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = Accent
-                    )
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(24.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        text = "LIFEOS\nTAP TO TALK",
-                        color = Background,
+                        text = "Your AI Assistant",
+                        color = LifeOSSurface,
+                        fontSize = 18.sp,
                         fontWeight = FontWeight.Bold
+                    )
+
+                    Spacer(Modifier.height(18.dp))
+
+                    Button(
+                        onClick = {
+                            // Voice integration will be added later.
+                        },
+                        modifier = Modifier.size(112.dp),
+                        shape = CircleShape,
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = LifeOSSurface,
+                            contentColor = LifeOSPurple
+                        )
+                    ) {
+                        Text(
+                            text = "TAP\nTO TALK",
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 14.sp,
+                            lineHeight = 19.sp
+                        )
+                    }
+
+                    Spacer(Modifier.height(12.dp))
+
+                    Text(
+                        text = "Your personal AI companion",
+                        color = LifeOSPurpleSoft,
+                        fontSize = 13.sp
                     )
                 }
             }
 
-            Spacer(Modifier.height(48.dp))
+            Spacer(Modifier.height(30.dp))
 
+            // Quick Actions
             Text(
                 text = "QUICK ACTIONS",
-                color = Color.White,
-                fontWeight = FontWeight.Bold
+                color = LifeOSText,
+                fontWeight = FontWeight.Bold,
+                fontSize = 15.sp
             )
 
-            Spacer(Modifier.height(16.dp))
+            Spacer(Modifier.height(14.dp))
 
             Row(
                 horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 QuickAction(
-                    "Tasks",
+                    "📋\nTasks",
                     Modifier.weight(1f),
                     onClick = onTasksClick
                 )
 
                 QuickAction(
-                    "My Goals",
-                    Modifier.weight(1f),
-
-                )
-            }
-
-            Spacer(Modifier.height(12.dp))
-
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-                QuickAction(
-                    "Reminders",
-                    Modifier.weight(1f),
-                    onClick = onRemindersClick
-                )
-
-                QuickAction(
-                    "AI Chat",
+                    "🎯\nMy Goals",
                     Modifier.weight(1f)
                 )
             }
@@ -130,32 +148,78 @@ fun DashboardScreen(
                 horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 QuickAction(
-                    "Calendar",
-                    Modifier.weight(1f) ,
+                    "⏰\nReminders",
+                    Modifier.weight(1f),
+                    onClick = onRemindersClick
+                )
+
+                QuickAction(
+                    "🤖\nAI Chat",
+                    Modifier.weight(1f)
+                )
+            }
+
+            Spacer(Modifier.height(12.dp))
+
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                QuickAction(
+                    "📅\nCalendar",
+                    Modifier.weight(1f),
                     onClick = onCalendarClick
                 )
 
                 QuickAction(
-                    "Coming Soon",
+                    "🔥\nHabits",
                     Modifier.weight(1f)
                 )
             }
 
             Spacer(Modifier.height(30.dp))
 
+            // Overview
             Text(
                 text = "TODAY'S OVERVIEW",
-                color = Color.White,
-                fontWeight = FontWeight.Bold
+                color = LifeOSText,
+                fontWeight = FontWeight.Bold,
+                fontSize = 15.sp
             )
 
-            Spacer(Modifier.height(12.dp))
+            Spacer(Modifier.height(14.dp))
 
-            Text(
-                text = "Your personal dashboard is ready.",
-                color = Color.LightGray,
-                fontSize = 14.sp
-            )
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(20.dp),
+                colors = CardDefaults.cardColors(
+                    containerColor = LifeOSSurface
+                ),
+                elevation = CardDefaults.cardElevation(
+                    defaultElevation = 2.dp
+                )
+            ) {
+                Column(
+                    modifier = Modifier.padding(20.dp)
+                ) {
+                    Text(
+                        text = "Your personal dashboard is ready ✨",
+                        color = LifeOSText,
+                        fontWeight = FontWeight.SemiBold,
+                        fontSize = 16.sp
+                    )
+
+                    Spacer(Modifier.height(8.dp))
+
+                    Text(
+                        text = "Stay focused, build better habits and make progress every day.",
+                        color = LifeOSMuted,
+                        fontSize = 13.sp,
+                        lineHeight = 20.sp
+                    )
+                }
+            }
+
+            Spacer(Modifier.height(24.dp))
         }
     }
 }
@@ -168,20 +232,27 @@ private fun QuickAction(
 ) {
     Card(
         onClick = onClick,
-        modifier = modifier.height(85.dp),
-        shape = RoundedCornerShape(16.dp),
+        modifier = modifier.height(100.dp),
+        shape = RoundedCornerShape(20.dp),
         colors = CardDefaults.cardColors(
-            containerColor = SurfaceDark
+            containerColor = LifeOSSurface
+        ),
+        elevation = CardDefaults.cardElevation(
+            defaultElevation = 2.dp
         )
     ) {
         Box(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(12.dp),
             contentAlignment = Alignment.Center
         ) {
             Text(
-                title,
-                color = Color.White,
-                fontWeight = FontWeight.Medium
+                text = title,
+                color = LifeOSText,
+                fontWeight = FontWeight.SemiBold,
+                fontSize = 15.sp,
+                lineHeight = 23.sp
             )
         }
     }
