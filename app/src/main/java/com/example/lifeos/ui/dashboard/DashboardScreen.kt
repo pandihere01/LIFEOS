@@ -1,8 +1,6 @@
+
 package com.example.lifeos.ui.dashboard
 
-
-
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -21,7 +19,11 @@ private val SurfaceDark = Color(0xFF171F33)
 private val Accent = Color(0xFF36BFFA)
 
 @Composable
-fun DashboardScreen(onTasksClick: () -> Unit = {}) {
+fun DashboardScreen(
+    onTasksClick: () -> Unit = {},
+    onCalendarClick: () -> Unit = {},
+    onRemindersClick: () -> Unit = {}
+) {
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = Background
@@ -32,12 +34,12 @@ fun DashboardScreen(onTasksClick: () -> Unit = {}) {
                 .statusBarsPadding()
                 .padding(24.dp)
         ) {
+
             Text(
                 text = "✨ LIFEOS",
                 color = Accent,
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold
-
             )
 
             Spacer(Modifier.height(30.dp))
@@ -62,7 +64,9 @@ fun DashboardScreen(onTasksClick: () -> Unit = {}) {
                 contentAlignment = Alignment.Center
             ) {
                 Button(
-                    onClick = { /* Voice integration on Day 2 */ },
+                    onClick = {
+                        // Voice integration will be added later.
+                    },
                     modifier = Modifier.size(170.dp),
                     shape = CircleShape,
                     colors = ButtonDefaults.buttonColors(
@@ -87,21 +91,54 @@ fun DashboardScreen(onTasksClick: () -> Unit = {}) {
 
             Spacer(Modifier.height(16.dp))
 
-            Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                //QuickAction("Tasks", Modifier.weight(1f))
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
                 QuickAction(
                     "Tasks",
                     Modifier.weight(1f),
                     onClick = onTasksClick
                 )
-                QuickAction("Calendar", Modifier.weight(1f))
+
+                QuickAction(
+                    "My Goals",
+                    Modifier.weight(1f),
+
+                )
             }
 
             Spacer(Modifier.height(12.dp))
 
-            Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                QuickAction("AI Chat", Modifier.weight(1f))
-                QuickAction("My Goals", Modifier.weight(1f))
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                QuickAction(
+                    "Reminders",
+                    Modifier.weight(1f),
+                    onClick = onRemindersClick
+                )
+
+                QuickAction(
+                    "AI Chat",
+                    Modifier.weight(1f)
+                )
+            }
+
+            Spacer(Modifier.height(12.dp))
+
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                QuickAction(
+                    "Calendar",
+                    Modifier.weight(1f) ,
+                    onClick = onCalendarClick
+                )
+
+                QuickAction(
+                    "Coming Soon",
+                    Modifier.weight(1f)
+                )
             }
 
             Spacer(Modifier.height(30.dp))
@@ -122,7 +159,6 @@ fun DashboardScreen(onTasksClick: () -> Unit = {}) {
         }
     }
 }
-
 
 @Composable
 private fun QuickAction(

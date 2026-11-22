@@ -46,7 +46,7 @@ fun TasksScreen(
         ) {
 
             TextButton(onClick = onBack) {
-                Text("← Back to LIFEOS", color = Accent)
+                Text("⬅\uFE0F Back to LIFEOS", color = Accent)
             }
 
             Spacer(Modifier.height(16.dp))
