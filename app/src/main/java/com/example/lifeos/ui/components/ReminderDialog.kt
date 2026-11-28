@@ -38,7 +38,7 @@ fun ReminderDialog(
                 ZoneId.systemDefault()
             )
         } ?: LocalDateTime.now()
-            .plusHours(1)
+            .plusMinutes(5)
             .withSecond(0)
             .withNano(0)
     }

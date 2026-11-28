@@ -1,7 +1,6 @@
 
 package com.example.lifeos.ui.dashboard
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -21,7 +20,9 @@ import com.example.lifeos.ui.theme.*
 fun DashboardScreen(
     onTasksClick: () -> Unit = {},
     onCalendarClick: () -> Unit = {},
-    onRemindersClick: () -> Unit = {}
+    onRemindersClick: () -> Unit = {},
+    onHabitsClick: () -> Unit = {},
+    onGoalsClick: () -> Unit = {}
 ) {
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -35,7 +36,6 @@ fun DashboardScreen(
                 .verticalScroll(rememberScrollState())
                 .padding(20.dp)
         ) {
-
             // Header
             Text(
                 text = "✨ LIFEOS",
@@ -138,7 +138,8 @@ fun DashboardScreen(
 
                 QuickAction(
                     "🎯\nMy Goals",
-                    Modifier.weight(1f)
+                    Modifier.weight(1f),
+                    onClick = onGoalsClick
                 )
             }
 
@@ -172,7 +173,8 @@ fun DashboardScreen(
 
                 QuickAction(
                     "🔥\nHabits",
-                    Modifier.weight(1f)
+                    Modifier.weight(1f),
+                    onClick = onHabitsClick
                 )
             }
 
@@ -186,7 +188,8 @@ fun DashboardScreen(
                 fontSize = 15.sp
             )
 
-            Spacer(Modifier.height(14.dp))
+            Spacer(Modifier.height(15.dp))
+
 
             Card(
                 modifier = Modifier.fillMaxWidth(),

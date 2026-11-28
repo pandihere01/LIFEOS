@@ -1,4 +1,3 @@
-
 package com.example.lifeos.service.notification
 
 import android.content.BroadcastReceiver
@@ -23,13 +22,13 @@ class BootReceiver : BroadcastReceiver() {
         Log.i(TAG, "BOOT_COMPLETED received")
 
         val pendingResult = goAsync()
+        val appContext = context.applicationContext
 
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                val appContext = context.applicationContext
-
                 Log.i(TAG, "Initializing database")
 
+                // Restore existing reminder alarms.
                 val database = LifeOSDatabase.getDatabase(appContext)
                 val repository = ReminderRepository(database.reminderDao())
                 val scheduler = ReminderScheduler(appContext)
@@ -53,7 +52,13 @@ class BootReceiver : BroadcastReceiver() {
                     )
                 }
 
-                Log.i(TAG, "Alarm restoration completed")
+                Log.i(TAG, "Reminder alarm restoration completed")
+
+                // Restore the daily 6:00 AM task summary.
+                TaskSummaryScheduler(appContext).scheduleNextSummary()
+
+                Log.i(TAG, "Daily task summary alarm restored")
+
             } catch (exception: Exception) {
                 Log.e(TAG, "Failed to restore alarms after reboot", exception)
             } finally {

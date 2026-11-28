@@ -14,5 +14,11 @@ data class TaskEntity(
 
     val isCompleted: Boolean = false,
 
-    val createdAt: Long = System.currentTimeMillis()
+    val createdAt: Long = System.currentTimeMillis(),
+
+    // Calendar date for which this task is planned (yyyy-MM-dd)
+    val dueDate: String = java.time.Instant.ofEpochMilli(createdAt)
+        .atZone(java.time.ZoneId.systemDefault())
+        .toLocalDate()
+        .toString()
 )
